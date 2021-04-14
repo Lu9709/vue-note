@@ -36,7 +36,13 @@
   </div>
 </template>
 <script>
+import request from '@/helpers/request'
+request('auth/login', 'POST', {username: 'hunger', password: '123456'})
+  .then(data => {
+    console.log(data)
+  })
 export default {
+
   data() {
     return {
       isShowLogin: true,
