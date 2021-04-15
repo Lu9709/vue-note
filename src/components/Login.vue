@@ -6,29 +6,29 @@
         <div class="form">
           <h3 @click="ShowRegister">创建账户</h3>
           <transition name="slide">
-          <div :class="{show:isShowRegister}" class="register">
-            <label>
-              <input type="text" v-model='register.username' placeholder="用户名">
-            </label>
-            <label>
-              <input type="password" v-model="register.password" placeholder="密码">
-            </label>
-            <p :class="{error:register.isError}">{{ register.notice }}</p>
-          <div class="button" @click="onRegister">创建账号</div>
-          </div>
+            <div :class="{show:isShowRegister}" class="register">
+              <label>
+                <input type="text" v-model='register.username' placeholder="用户名">
+              </label>
+              <label>
+                <input type="password" v-model="register.password" placeholder="密码">
+              </label>
+              <p :class="{error:register.isError}">{{ register.notice }}</p>
+              <div class="button" @click="onRegister">创建账号</div>
+            </div>
           </transition>
           <h3 @click="showLogin">登录</h3>
           <transition name="slide">
-          <div :class="{show:isShowLogin}" class="login">
-            <label>
-              <input type="text" v-model="login.username" placeholder="用户名">
-            </label>
-            <label>
-              <input type="password" v-model="login.password" placeholder="密码">
-            </label>
-            <p :class="{error:login.isError}">{{ login.notice }}</p>
-            <div class="button" @click="onLogin">登录</div>
-          </div>
+            <div :class="{show:isShowLogin}" class="login">
+              <label>
+                <input type="text" v-model="login.username" placeholder="用户名">
+              </label>
+              <label>
+                <input type="password" v-model="login.password" placeholder="密码">
+              </label>
+              <p :class="{error:login.isError}">{{ login.notice }}</p>
+              <div class="button" @click="onLogin">登录</div>
+            </div>
           </transition>
         </div>
       </div>
@@ -37,10 +37,10 @@
 </template>
 <script>
 import request from '@/helpers/request'
-request('auth/login', 'POST', {username: 'hunger', password: '123456'})
-  .then(data => {
-    console.log(data)
-  })
+request('/auth')
+.then(data=>{
+  console.log(data)
+})
 export default {
 
   data() {
@@ -84,6 +84,10 @@ export default {
       this.register.isError = false
       this.register.notice = ''
       console.log(`start register..., username: ${this.register.username} , password: ${this.register.password}`)
+      request('auth/register', 'POST', {
+        username: this.register.username,
+        password: this.register.password
+      }).then(data => console.log(data))
     },
     onLogin() {
       if (!/^[\w\u4e00-\u9fa5]{3,15}$/.test(this.login.username)) {
@@ -99,6 +103,10 @@ export default {
       this.login.isError = false
       this.login.notice = ''
       console.log(`start login..., username: ${this.login.username} , password: ${this.login.password}`)
+      request('auth/login', 'POST', {
+          username: this.login.username,
+          password: this.login.password
+        }).then(data => {console.log(data)})
     }
   }
 }
@@ -146,6 +154,7 @@ export default {
     width: 270px;
     border-left: 1px solid #ccc;
     overflow: hidden;
+
     h3 {
       padding: 10px 20px;
       font-weight: normal;
@@ -177,9 +186,11 @@ export default {
       height: 0;
       overflow: hidden;
       transition: height .4s;
-      &.show{
+
+      &.show {
         height: 193px;
       }
+
       input {
         display: block;
         width: 100%;
