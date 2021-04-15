@@ -14,12 +14,15 @@
 
 <script>
 import Avatar from "./Avatar"
+import Auth from '@/apis/auth'
 
 export default {
   components: {Avatar},
-  methods:{
-    onLogout(){
-      console.log(1)
+  methods: {
+    onLogout() {
+      console.log('logout')
+      Auth.logout()
+        .then(data => console.log(data))
     }
   }
 }
@@ -55,6 +58,7 @@ export default {
     text-align: center;
     cursor: pointer;
   }
+
   .iconfont {
     color: #fff;
   }
