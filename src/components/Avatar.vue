@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import Bus from '@/helpers/bus'
 import Auth from '@/apis/auth'
 export default {
   data() {
@@ -10,7 +11,11 @@ export default {
       username: '未登录',
     }
   },
+  // 创建的时候获取用户的信息
   created() {
+    Bus.$on('userInfo',user=>{
+      this.username=user.name
+    })
     Auth.getInfo().then(
       res=>{
         if(res.isLogin){
