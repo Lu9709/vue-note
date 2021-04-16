@@ -9,13 +9,13 @@
       <div class="layout">
         <h3>笔记本列表{{notebooks.length}}</h3>
         <div class="book-list">
-          <router-link v-for="notebook in notebooks" to="/note/1" class="notebook">
+          <router-link v-for="notebook in notebooks" :key="notebook" to="/note/1" class="notebook">
             <div>
               <span class="iconfont icon-notebook"></span> {{notebook.title}}
               <span>{{notebook.noteCounts}}</span>
               <span class="action" @click.stop.prevent="onEdit(notebook)">编辑</span>
               <span class="action" @click.stop.prevent="onDelete(notebook)">删除</span>
-              <span class="date">3天前</span>
+              <span class="date">{{notebook.friendlyCreatedAt}}</span>
             </div>
           </router-link>
         </div>
@@ -27,6 +27,7 @@
 <script>
 import Auth from '@/apis/auth'
 import NoteBooks from '@/apis/notebooks'
+import {friendlyDate} from  '@/helpers/util'
 
 export default {
   data() {
@@ -56,6 +57,7 @@ export default {
       NoteBooks.addNoteBook({title})
       .then(res=>{
         console.log(res)
+        res.data.friendlyCreatedAt = friendlyDate(res.data.createdAt)
         this.notebooks.unshift(res.data) //unshift添加至数组头
         alert(res.msg)
       })
