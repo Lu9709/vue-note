@@ -9,12 +9,12 @@
       <div class="layout">
         <h3>笔记本列表{{notebooks.length}}</h3>
         <div class="book-list">
-          <router-link v-for="notebook in notebooks" :key="notebook" to="/note/1" class="notebook">
+          <router-link v-for="notebook in notebooks"  to="/note/1" class="notebook">
             <div>
               <span class="iconfont icon-notebook"></span> {{notebook.title}}
               <span>{{notebook.noteCounts}}</span>
-              <span class="action" @click="onEdit">编辑</span>
-              <span class="action" @click="onDelete">删除</span>
+              <span class="action" @click.stop.prevent="onEdit(notebook)">编辑</span>
+              <span class="action" @click.stop.prevent="onDelete(notebook)">删除</span>
               <span class="date">3天前</span>
             </div>
           </router-link>
@@ -48,13 +48,23 @@ export default {
   },
   methods: {
     onCreate() {
-      console.log('created')
+      let title = window.prompt('创建笔记本')
+      if(title.trim()===''){ //trim去除空字符串
+        alert('笔记本名不能为空')
+        return
+      }
+      NoteBooks.addNoteBook({title})
+      .then(res=>{
+        console.log(res)
+        alert(res.msg)
+        this.notebooks.unshift(res.data) //unshift添加至数组头
+      })
     },
-    onEdit() {
-      console.log('onEdit')
+    onEdit(notebook) {
+      console.log('onEdit',notebook)
     },
-    onDelete() {
-      console.log('onDelete')
+    onDelete(notebook) {
+      console.log('onDelete',notebook)
     }
   }
 }
