@@ -1,6 +1,6 @@
 import axios from 'axios'
 import baseURLConfig from './config-baseURL'
-
+import {Message} from 'element-ui'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.defaults.baseURL = baseURLConfig.baseURL
 axios.defaults.withCredentials = true //是否使用跨域请求
@@ -22,15 +22,14 @@ function request(url, type = "GET", data = {}) {
       if (res.status === 200) {
         resolve(res.data)
       } else {
+        Message.error(res.data.msg)
         reject(res.data)
       }
     }).catch(err => {
+      Message.error(res.data.msg)
       reject({msg: '网络异常'})
     })
   })
 }
 export default  request
-// request('auth/login', 'POST', {username: 'hunger', password: '123456'})
-//   .then(data => {
-//     console.log(data)
-//   })
+
