@@ -14,7 +14,7 @@ export default {
   // 创建的时候获取用户的信息
   created() {
     Bus.$on('userInfo',user=>{
-      this.username=user.name
+      this.username=user.username
     })
     Auth.getInfo().then(
       res=>{
