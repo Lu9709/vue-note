@@ -39,10 +39,7 @@
 import Bus from '@/helpers/bus'
 import Auth from "@/apis/auth"
 
-Auth.getInfo()
-  .then(data => {
-    console.log(data)
-  })
+
 export default {
 
   data() {
