@@ -29,8 +29,8 @@
 import NoteBooks from '@/apis/notebooks'
 import Notes from '@/apis/notes'
 
-
 export default {
+
   data() {
     return {
       notebooks: [],
@@ -47,6 +47,8 @@ export default {
         return Notes.getAll({notebookId: this.curBook.id})
       }).then(res => {
       this.notes = res.data
+      this.$emit('update:notes',this.notes)
+      // 触发事件
     })
   },
   methods: {
@@ -58,6 +60,7 @@ export default {
       Notes.getAll({notebookId})
         .then(res => {
           this.notes = res.data
+          this.$emit('update:notes',this.notes)
         })
     }
   }

@@ -1,60 +1,61 @@
 <template>
   <div id="note" class="detail">
-    <note-sidebar/>
+    <note-sidebar  @update:notes="value=> notes = value"/>
     <div class="note-detail">
       <div class="note-bar">
-        <span> 创建日期:{{curNote.createdAtFriendly}}</span>
-        <span> 更新日期:{{curNote.updatedAtFriendly}}</span>
-        <span>{{curNote.statusText}}</span>
+        <span> 创建日期:{{ curNote.createdAtFriendly }}</span>
+        <span> 更新日期:{{ curNote.updatedAtFriendly }}</span>
+        <span>{{ curNote.statusText }}</span>
         <span class="iconfont icon-delete"></span>
         <span class="iconfont icon-fullscreen"></span>
       </div>
       <div class="note-title">
         <label>
-          <input type="text" :value="curNote.title" placeholder="输入标题">
+          <input type="text" v-model="curNote.title" placeholder="输入标题">
         </label>
       </div>
       <div class="editor">
         <label>
           <textarea v-show="true" :value="curNote.content" placeholder="输入内容,支持 markdown 的语法"></textarea>
         </label>
-          <div class="preview markdown-body" v-html="" v-show="false"></div>
+        <div class="preview markdown-body" v-html="" v-show="false"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import  Auth from '@/apis/auth'
+import Auth from '@/apis/auth'
 import NoteSidebar from "@/components/NoteSidebar"
+
 export default {
-  components:{
+  components: {
     NoteSidebar
   },
-  data () {
+  data() {
     return {
-      curNote:{
-        title:'我的笔记',
-        content:'我的笔记内容',
-        createdAtFriendly:'一天前',
-        updatedAtFriendly:'刚刚',
-        statusText:'未更新'
-      }
+      curNote: {},
+      notes: []
     }
   },
   created() {
     Auth.getInfo().then(
-      res=>{
-        if(!res.isLogin){
-          this.$router.push({path:'/login'})
+      res => {
+        if (!res.isLogin) {
+          this.$router.push({path: '/login'})
         }
       }
     )
-  }
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.curNote = this.notes.find(note => note.id == to.query.noteId)
+    next()
+  },
 }
 </script>
 <style lang="less" scoped>
 @import url(../assets/css/note-detail.less);
+
 #note {
   display: flex;
   align-items: stretch;
