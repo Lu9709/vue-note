@@ -28,7 +28,7 @@
 <script>
 import NoteBooks from '@/apis/notebooks'
 import Notes from '@/apis/notes'
-
+import Bus from '@/helpers/bus'
 export default {
 
   data() {
@@ -49,6 +49,7 @@ export default {
       this.notes = res.data
       this.$emit('update:notes',this.notes)
       // 触发事件
+      Bus.$emit('update:notes',this.notes)
     })
   },
   methods: {
