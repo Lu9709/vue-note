@@ -15,6 +15,7 @@
 <script>
 import Avatar from "./Avatar"
 import Auth from '@/apis/auth'
+import router from '@/router'
 
 export default {
   components: {Avatar},
@@ -23,6 +24,7 @@ export default {
       console.log('logout')
       Auth.logout()
         .then(data => console.log(data))
+      router.push({path: '/login'})
     }
   }
 }
