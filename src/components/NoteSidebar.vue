@@ -26,31 +26,22 @@
 </template>
 
 <script>
-import {mapGetters,mapActions} from 'vuex'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
+
 export default {
   data() {
     return {}
   },
   created() {
     this.getNotebooks()
-      .then(()=>{
-        this.$store.commit('setCurBook',{curBookId:this.$route.query.notebookId})
-        this.getNotes({notebookId: this.curBook.id})
-      })
-    // NoteBooks.getAll()
-    //   .then(res => {
-    //     this.notebooks = res.data
-    //     this.curBook = this.notebooks.find(notebook => notebook.id === this.$route.query.notebookId)
-    //       || this.notebooks[0] || {}
-    //     return Notes.getAll({notebookId: this.curBook.id})
-    //   }).then(res => {
-    //   this.notes = res.data
-    //   this.$emit('update:notes',this.notes)
-    //   // 触发事件
-    //   Bus.$emit('update:notes',this.notes)
-    // })
+      .then(() => {
+        this.setCurBook({ curBookId: this.$route.query.notebookId })
+        return this.getNotes({ notebookId: this.curBook.id})
+      }).then(() => {
+      this.setCurNote({ curNoteId: this.$route.query.noteId })
+    })
   },
-  computed:{
+  computed: {
     ...mapGetters([
       "notebooks",
       "notes",
@@ -58,20 +49,24 @@ export default {
     ])
   },
   methods: {
+    ...mapMutations([
+      'setCurBook',
+      'setCurNote'
+    ]),
     ...mapActions([
       "getNotebooks",
       "getNotes",
       "addNote"
     ]),
     handleCommand(notebookId) {
-      if (notebookId === 'trash') {
+      if (notebookId == 'trash') {
         return this.$router.push({path: '/trash'})
       }
-      this.$store.commit('setCurBook',{curBookId:notebookId})
+      this.$store.commit('setCurBook', {curBookId: notebookId})
       this.getNotes({notebookId})
     },
-    onAddNote(){
-      this.addNote({notebookId:this.curBook.id})
+    onAddNote() {
+      this.addNote({notebookId: this.curBook.id})
     }
   },
 
