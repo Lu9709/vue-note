@@ -63,7 +63,6 @@ export default {
         this.addNotebook({title: value})
       })
     },
-
     onEdit(notebook) {
       let title = ''
       this.$prompt('输入新笔记本标题', '修改笔记本', {
@@ -74,17 +73,16 @@ export default {
         inputErrorMessage: '标题不能为空，且不超过30个字符'
       }).then(({value}) => {
         title = value
-        this.updateNotebook({notebookId:notebook.id,title:value})
+        this.updateNotebook({notebookId: notebook.id, title: value})
       })
     },
-
     onDelete(notebook) {
       this.$confirm('确认要删除笔记本吗', '删除笔记本', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.deleteNotebook({notebookId:notebook.id})
+        this.deleteNotebook({notebookId: notebook.id})
       })
     }
   }
