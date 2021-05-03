@@ -65,9 +65,9 @@ const actions = {
   },
 
   deleteNote({ commit }, { noteId }) {
-    return Note.deleteNotebook({ noteId })
+    return Note.deleteNote({ noteId })
       .then(res => {
-        commit('deleteNotebook', { noteId })
+        commit('deleteNote', { noteId })
         Message.success(res.msg)
       })
   }

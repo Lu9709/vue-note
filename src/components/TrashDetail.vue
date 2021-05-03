@@ -39,8 +39,10 @@
 <script>
 import Auth from '@/apis/auth'
 import MarkdownIt from 'markdown-it'
+import Trash from '@/apis/trash'
 
 
+window.Trash = Trash
 let md = new MarkdownIt()
 
 export default {
