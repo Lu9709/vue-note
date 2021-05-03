@@ -41,7 +41,9 @@ const mutations = {
 }
 
 const actions = {
-  getNotebooks({ commit }) {
+  getNotebooks({ commit,state }) {
+    // 切换导航栏后若notebooks存在 就不必在发送请求
+    if(state.notebooks !== null) return Promise.resolve()
    return  Notebook.getAll()
       .then(res => {
         commit('setNotebooks', { notebooks: res.data })

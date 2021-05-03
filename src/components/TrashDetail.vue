@@ -9,25 +9,25 @@
       <ul class="notes">
         <li v-for="note in trashNotes">
           <router-link :to="`/trash?noteId=${note.id}`">
-            <span class="date">{{note.updatedAtFriendly}}</span>
-            <span class="title">{{note.title}}</span>
+            <span class="date">{{ note.updatedAtFriendly }}</span>
+            <span class="title">{{ note.title }}</span>
           </router-link>
         </li>
       </ul>
     </div>
     <div class="note-detail">
       <div class="note-bar" v-if="true">
-        <span> 创建日期: {{curTrashNote.createdAtFriendly}}</span>
+        <span> 创建日期: {{ curTrashNote.createdAtFriendly }}</span>
         <span> | </span>
-        <span> 更新日期: {{curTrashNote.updatedAtFriendly}}</span>
+        <span> 更新日期: {{ curTrashNote.updatedAtFriendly }}</span>
         <span> | </span>
-        <span> 所属笔记本: {{belongTo}}</span>
+        <span> 所属笔记本: {{ belongTo }}</span>
 
         <a class="btn action" @click="onRevert">恢复</a>
         <a class="btn action" @click="onDelete">彻底删除</a>
       </div>
       <div class="note-title">
-        <span>{{curTrashNote.title}}</span>
+        <span>{{ curTrashNote.title }}</span>
       </div>
       <div class="editor">
         <div class="preview markdown-body" v-html="compiledMarkdown"></div>
@@ -39,31 +39,32 @@
 <script>
 
 import MarkdownIt from 'markdown-it'
-import {mapGetters,mapActions,mapMutations} from 'vuex'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
+
 let md = new MarkdownIt()
 
 export default {
-  data () {
-    return {
-      belongTo: '我的笔记本'
-    }
+  data() {
+    return {}
   },
 
   created() {
-   this.checkLogin({path:'/login'})
+    this.checkLogin({path: '/login'})
+    this.getNotebooks()
     this.getTrashNotes()
-    .then(()=>{
-      this.setCurTrashNote({curTrashNoteId:this.$route.query.noteId})
-    })
+      .then(() => {
+        this.setCurTrashNote({curTrashNoteId: this.$route.query.noteId})
+      })
   },
 
   computed: {
     ...mapGetters([
       'trashNotes',
-      'curTrashNote'
+      'curTrashNote',
+      'belongTo'
     ]),
-    compiledMarkdown () {
-      return md.render(this.curTrashNote.content||'')
+    compiledMarkdown() {
+      return md.render(this.curTrashNote.content || '')
     }
   },
 
@@ -75,19 +76,20 @@ export default {
       'checkLogin',
       'deleteTrashNote',
       'revertTrashNote',
-      'getTrashNotes'
+      'getTrashNotes',
+      'getNotebooks'
     ]),
     onDelete() {
-      console.log({ noteId: this.curTrashNote.id })
-      this.deleteTrashNote({ noteId: this.curTrashNote.id })
+      console.log({noteId: this.curTrashNote.id})
+      this.deleteTrashNote({noteId: this.curTrashNote.id})
     },
 
     onRevert() {
-      this.revertTrashNote({ noteId: this.curTrashNote.id })
+      this.revertTrashNote({noteId: this.curTrashNote.id})
     }
   },
-  beforeRouteUpdate (to, from, next) {
-    this.setCurTrashNote({ curTrashNoteId: to.query.noteId})
+  beforeRouteUpdate(to, from, next) {
+    this.setCurTrashNote({curTrashNoteId: to.query.noteId})
     next()
   }
 }

@@ -1,42 +1,45 @@
 import Auth from '@/apis/auth'
-import router from  '@/router'
+import router from '@/router'
+
 const state = {
-  user:null
+  user: null
 }
 
 const getters = {
-  username:state => state.user === null ? '未登录':state.user.username,
-  slug:state => state.user === null ? '未' : state.user.username.charAt(0)
+  username: state => state.user === null ? '未登录' : state.user.username,
+  slug: state => state.user === null ? '未' : state.user.username.charAt(0)
 }
 
 const mutations = {
-  setUser(state,payload){
+  setUser(state, payload) {
     state.user = payload.user
   }
 }
 
 const actions = {
-  login({commit},{username,password}){
-    return Auth.login({username,password})
-      .then(res=>{
+  login({commit}, {username, password}) {
+    return Auth.login({username, password})
+      .then(res => {
         console.log(res)
-        commit('setUser',{user:res.data})
+        commit('setUser', {user: res.data})
       })
   },
-  register({commit},{username,password}){
-    return Auth.register({username,password})
-      .then(res=>{
+  register({commit}, {username, password}) {
+    return Auth.register({username, password})
+      .then(res => {
         console.log(res)
-        commit('setUser',{user:res.data})
+        commit('setUser', {user: res.data})
       })
   },
-  checkLogin({commit},payload){
+  checkLogin({commit, state}, payload) {
+    // 切换导航栏后若user已经登录 就不必在发送请求
+    if (state.user !== null) return Promise.resolve()
     return Auth.getInfo()
-      .then(res=>{
-        if(!res.isLogin){
+      .then(res => {
+        if (!res.isLogin) {
           router.push(payload)
-        }else{
-          commit('setUser',{user:res.data})
+        } else {
+          commit('setUser', {user: res.data})
         }
       })
   }
