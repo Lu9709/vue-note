@@ -14,17 +14,13 @@
 
 <script>
 import Avatar from "./Avatar"
-import Auth from '@/apis/auth'
-import router from '@/router'
-
+import {mapActions} from 'vuex'
 export default {
   components: {Avatar},
   methods: {
-    onLogout() {
-      console.log('logout')
-      Auth.logout()
-        .then(data => console.log(data))
-      router.push({path: '/login'})
+    ...mapActions(['logout']),
+    onLogout(){
+      this.logout({path:'/login'})
     }
   }
 }

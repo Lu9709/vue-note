@@ -31,6 +31,13 @@ const actions = {
         commit('setUser', {user: res.data})
       })
   },
+  logout({commit},payload={path:'/login'}) {
+    return Auth.logout()
+      .then(res => {
+        commit('setUser', {user: null})
+        router.push(payload)
+      })
+  },
   checkLogin({commit, state}, payload) {
     // 切换导航栏后若user已经登录 就不必在发送请求
     if (state.user !== null) return Promise.resolve()
