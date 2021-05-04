@@ -33,8 +33,8 @@ export default {
     return  new Promise((resolve,reject)=>{
        request(URL.ADD, 'POST', {title})
          .then(res=>{
-           res.data.createdAtFriendly = friendlyDate(res.createdAt)
-           res.data.updatedAtFriendly = friendlyDate(res.updatedAt)
+           res.data.createdAtFriendly = friendlyDate(res.data.createdAt)
+           res.data.updatedAtFriendly = friendlyDate(res.data.updatedAt)
            resolve(res)
          }).catch(err=>{
            reject(err)

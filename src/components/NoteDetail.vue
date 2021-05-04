@@ -2,7 +2,8 @@
   <div id="note" class="detail">
     <note-sidebar @update:notes="value=> notes = value"/>
     <div class="note-detail">
-      <div class="note-empty" v-show="!curNote.id">请选择笔记</div>
+      <div class="note-empty" v-show="!curBook.id">请创建笔记本后</div>
+      <div class="note-empty" v-show="!curNote.id">选择或创建笔记</div>
       <div class="note-detail-tc" v-show="curNote.id">
         <div class="note-bar">
           <span> 创建日期:{{ curNote.createdAtFriendly }}</span>
@@ -54,7 +55,8 @@ export default {
   computed: {
     ...mapGetters([
       'notes',
-      'curNote'
+      'curNote',
+      'curBook'
     ]),
     previewContent() {
       // content为空需要进行处理
@@ -72,7 +74,7 @@ export default {
     ]),
     //节流
     onUpdateNote: _.debounce(function() {
-      if(this.curNote.id) return
+      if(!this.curNote.id) return
       this.updateNote({ noteId: this.curNote.id, title: this.curNote.title, content: this.curNote.content })
         .then(data => {
           this.statusText = '已保存'

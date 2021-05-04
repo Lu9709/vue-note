@@ -1,33 +1,32 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login'
-import NotebookList from '@/components/NotebookList'
-import NoteDetail from '@/components/NoteDetail'
-import TrashDetail from '@/components/TrashDetail'
-import HelloWorld from "@/components/HelloWorld"
+
+
 
 Vue.use(Router)
-
+// 路由懒加载
 export default new Router({
   routes: [
     {
       path:'/',
-      component: HelloWorld
+      alias:'/notebooks',
+      component: ()=>import('@/components/NotebookList.vue')
+      //重定向别名
     },
     {
       path: '/Login',
-      component: Login
+      component: ()=>import('@/components/Login.vue')
     }, {
       path: '/notebooks',
-      component: NotebookList
+      component: ()=>import('@/components/NotebookList.vue')
     },
     {
-      path: '/note/',
-      component: NoteDetail
+      path: '/note',
+      component: ()=>import('@/components/NoteDetail.vue')
     },
     {
-      path: '/trash/',
-      component: TrashDetail
+      path: '/trash',
+      component: ()=>import('@/components/TrashDetail.vue')
     }
   ]
 })
